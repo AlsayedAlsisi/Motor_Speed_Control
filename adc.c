@@ -20,18 +20,18 @@
 typedef enum
 {
 	ADC_EXTERNAL_AREF=0,		// The AREF pin should be connected to +5v.
-	ADC_AVCC_AREF,				// AVCC with external capacitor at AREF pin.
+	ADC_AVCC_AREF,			// AVCC with external capacitor at AREF pin.
 	ADC_INTERNAL_2_56_AREF		// Internal 2.56V Voltage Reference with external capacitor at AREF pin
 } reference_voltage_t;
 
 typedef enum{
-	ADC_PRESCALAR_2=0,					// clk/2
-	ADC_PRESCALAR_4,					// clk/4
-	ADC_PRESCALAR_8,					// clk/8
-	ADC_PRESCALAR_16,					// clk/16
-	ADC_PRESCALAR_32,	                // clk/32
-	ADC_PRESCALAR_64,		            // clk/64
-	ADC_PRESCALAR_128                   // clk/128
+	ADC_PRESCALAR_2=0,		// clk/2
+	ADC_PRESCALAR_4,		// clk/4
+	ADC_PRESCALAR_8,		// clk/8
+	ADC_PRESCALAR_16,		// clk/16
+	ADC_PRESCALAR_32,	        // clk/32
+	ADC_PRESCALAR_64,	        // clk/64
+	ADC_PRESCALAR_128               // clk/128
 }adc_prescalar_t;
 
 typedef enum{
