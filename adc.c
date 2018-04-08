@@ -52,19 +52,19 @@ typedef enum{
 /*----------------------------------------------------------------
 --------------------- Private Functions Prototypes ---------------
 ----------------------------------------------------------------*/
-    void adc_enable(void);
-    void adc_disable(void);
-    void adc_reference_voltage(reference_voltage_t reference_voltage);
-    void adc_set_clock_prescalar(adc_prescalar_t adc_prescalar);
-    uint16_t adc_read_adc_register();
-	void adc_start_conversion(void);
-    void adc_wait_conversion_complete(void);
-    void adc_select_channel(adc_channel_t adc_channel);
-    void adc_enable_interrupts(void);
-    void adc_disable_interrupts(void);
-    void adc_enable_auto_triggerig(void);
-    void adc_disable_auto_triggerig(void);
-    void adc_select_auto_triggering_source(adc_auto_triggering_source_t adc_auto_triggering_source);
+   static void adc_enable(void);
+   static void adc_disable(void);
+   static void adc_reference_voltage(reference_voltage_t reference_voltage);
+   static void adc_set_clock_prescalar(adc_prescalar_t adc_prescalar);
+   static uint16_t adc_read_adc_register();
+   static void adc_start_conversion(void);
+   static void adc_wait_conversion_complete(void);
+   static void adc_select_channel(adc_channel_t adc_channel);
+   static void adc_enable_interrupts(void);
+   static void adc_disable_interrupts(void);
+   static void adc_enable_auto_triggerig(void);
+   static void adc_disable_auto_triggerig(void);
+   static void adc_select_auto_triggering_source(adc_auto_triggering_source_t adc_auto_triggering_source);
 
 /*----------------------------------------------------------------
 --------------------- Public Function Definitions ----------------
@@ -77,21 +77,34 @@ void adc_init(void)
 }
 
 
+//The following function is used to read an ADC channel using polling technique.
+uint16_t adc_read_channel(adc_channel_t adc_channel)
+ {
+	 uint16_t adc_register_value;
+	 adc_disable_interrupts();
+	 adc_select_channel(adc_channel); 
+	 adc_start_conversion();
+	 adc_wait_conversion_complete();
+	 adc_register_value = adc_read_adc_register();
+	 return adc_register_value;
+ }
+ 
+
 /*----------------------------------------------------------------
 --------------------- Private Function Definitions ----------------
 ----------------------------------------------------------------*/
- void adc_enable(void)
+ static void adc_enable(void)
  {
 	ADCSRA |= (1 << ADEN);
  }
 
- void adc_disable(void)
+ static void adc_disable(void)
  {
    ADCSRA &= ~(1 << ADEN);
  }
  
 //The following fn determines the division factor between the XTAL frequency and the input clock to the ADC.
- void adc_reference_voltage(reference_voltage_t reference_voltage)
+static void adc_reference_voltage(reference_voltage_t reference_voltage)
  {
 	
 	switch(reference_voltage)
@@ -114,7 +127,7 @@ void adc_init(void)
 	}
 }
 
-void adc_set_clock_prescalar(adc_prescalar_t adc_prescalar)
+static void adc_set_clock_prescalar(adc_prescalar_t adc_prescalar)
 {
 	switch(adc_prescalar)
 	{
@@ -155,35 +168,24 @@ void adc_set_clock_prescalar(adc_prescalar_t adc_prescalar)
 		break;
 	}
 }
-//The following function is used to read an ADC channel using polling technique.
-uint16_t adc_read_channel(adc_channel_t adc_channel)
- {
-	 uint16_t adc_register_value;
-	 adc_disable_interrupts();
-	 adc_select_channel(adc_channel); 
-	 adc_start_conversion();
-	 adc_wait_conversion_complete();
-	 adc_register_value = adc_read_adc_register();
-	 return adc_register_value;
- }
- 
- uint16_t adc_read_adc_register()
+
+ static uint16_t adc_read_adc_register()
  {
 	 return ADC;
  }
  
-void adc_start_conversion(void)
+static void adc_start_conversion(void)
  {
 	 ADCSRA |= (1 << ADSC); 
  }
  
- void adc_wait_conversion_complete(void)
+static void adc_wait_conversion_complete(void)
  {
 	 while( (ADCSRA & (1 << ADIF)) == 0);
 	 ADCSRA |= (1 << ADIF); //Clear the flag. Note that in AVR MCUs, you clear the interrupt flags by writing 1 to them.
  }
 
- void adc_select_channel(adc_channel_t adc_channel)
+ static void adc_select_channel(adc_channel_t adc_channel)
  {
 	 
 		 switch(adc_channel)
@@ -228,31 +230,30 @@ void adc_start_conversion(void)
  
  
  //When the following function is called, the ADC Conversion Complete Interrupt is activated.
- 
-void adc_enable_interrupts(void)
+static void adc_enable_interrupts(void)
  {
 	  ADCSRA |= (1 << ADIE);
 	  sei();
  }
 
- void adc_disable_interrupts(void)
+static void adc_disable_interrupts(void)
 {
 	ADCSRA &= ~(1 << ADIE);
 }
 
-void adc_enable_auto_triggerig(void)
+static void adc_enable_auto_triggerig(void)
  {
 	  ADCSRA |= (1 << ADATE);
  }
  
  
- void adc_disable_auto_triggerig(void)
+ static void adc_disable_auto_triggerig(void)
   {
 	  ADCSRA &= ~(1 << ADATE);
   }
   
  
- void adc_select_auto_triggering_source(adc_auto_triggering_source_t adc_auto_triggering_source)
+ static void adc_select_auto_triggering_source(adc_auto_triggering_source_t adc_auto_triggering_source)
  {
 	
 		 switch (adc_auto_triggering_source)
