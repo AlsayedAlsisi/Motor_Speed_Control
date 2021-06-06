@@ -81,7 +81,7 @@ void timer2_pwm_duty_cycle_set(uint8_t duty_cycle_percentage)
 	if (duty_cycle_percentage == 0)
 	{ OCR2 = 0; }
 	else
-	{ OCR2 = ( ( (duty_cycle_percentage * 256) / 100) - 1 ); }
+	{ OCR2 = ( ( (duty_cycle_percentage * 255) / 100) - 1 ); }
 }
 
 /*----------------------------------------------------------------
